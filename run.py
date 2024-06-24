@@ -23,6 +23,8 @@ def check_env():
         raise Exception('请按照文档设置INVITE_CODE环境变量')
 
 
+
+
 # 滑块数据加密
 def r(e, t):
     n = t - 1
