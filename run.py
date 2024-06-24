@@ -21,6 +21,7 @@ def check_env():
     if not INVITE_CODE:
         print('请按照文档设置INVITE_CODE环境变量')
         raise Exception('请按照文档设置INVITE_CODE环境变量')
+        
 
 
 # 滑块数据加密
