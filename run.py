@@ -142,6 +142,7 @@ async def get_code(mail, max_retries=10, delay=1):
                     retries += 1
     print("获取邮箱邮件内容失败，未收到邮件...")
     return None
+    
 
 
 async def init(xid, mail):
