@@ -149,3 +149,4 @@ pikpak_auto_invite
 [stars-url]: https://github.com/LinYuanovo/pikpak_auto_invite/stargazers
 [issues-shield]: https://img.shields.io/github/issues/LinYuanovo/pikpak_auto_invite.svg?style=flat-square
 [issues-url]: https://img.shields.io/github/issues/LinYuanovo/pikpak_auto_invite.svg
+测试运行
