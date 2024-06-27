@@ -68,7 +68,7 @@ def save_img(img, path):
 def delete_img():
     for file in os.listdir('temp/'):
         os.remove(f'temp/{file}')
-    print('删除缓存图片成功')
+    # print('删除缓存图片成功')
 
 
 def run(img_path, frames):

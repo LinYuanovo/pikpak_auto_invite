@@ -7,7 +7,6 @@ on:
       - '!.gitignore'
       - '!README.md'
   schedule:
-    # 每天晚六点十分执行一次
     - cron:  '08 18 * * *'
 
 jobs:
@@ -24,4 +23,5 @@ jobs:
       - name: Run
         env:
           INVITE_CODE: ${{secrets.INVITE_CODE}}
+          PUSHPLUS_TOKEN: ${{secrets.PUSHPLUS_TOKEN}}
         run: python run.py
