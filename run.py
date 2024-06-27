@@ -13,13 +13,48 @@ from rich import print_json
 DEBUG_MODE = False  # Debug模式，是否打印请求返回信息
 # PROXY = input('请输入代理，如不需要直接回车:')  # 代理，如果多次出现IP问题可尝试将自己所用的魔法设置为代理。例如：使用clash则设置为 'http://127.0.0.1:7890'
 PROXY = ''
+PUSHPLUS_TOKEN = os.getenv('PUSHPLUS_TOKEN') or ''
 INVITE_CODE = os.getenv('INVITE_CODE') or input('请输入邀请码: ')
+PUSH_MSG = ''
 
 # 检查变量
 def check_env():
+    invite_code_list = []
+    if not PUSHPLUS_TOKEN:
+        print('请按照文档设置PUSHPLUS_TOKEN环境变量')
     if not INVITE_CODE:
         print('请按照文档设置INVITE_CODE环境变量')
         raise Exception('请按照文档设置INVITE_CODE环境变量')
+    else:
+        if '@' in INVITE_CODE:
+            invite_code_list = INVITE_CODE.split('@')
+        elif '\n' in INVITE_CODE:
+            invite_code_list = INVITE_CODE.split('\n')
+        else:
+            invite_code_list.append(INVITE_CODE)
+        return invite_code_list
+
+
+# 推送
+async def push(content):
+    if PUSHPLUS_TOKEN:
+        url = 'http://www.pushplus.plus/send'
+        data = {
+            "token": PUSHPLUS_TOKEN,
+            "title": 'PikPak邀请通知',
+            "content": content,
+        }
+        headers = {'Content-Type': 'application/json'}
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, headers=headers, data=json.dumps(data)) as response:
+                    response_data = await response.json()
+                    if response_data['code'] == 200:
+                        print('推送成功')
+                    else:
+                        print(f'推送失败，{response_data["msg"]}')
+        except Exception as e:
+            print(e)
 
 
 # 滑块数据加密
@@ -191,6 +226,8 @@ async def init(xid, mail):
                     print_json(json.dumps(response_data, indent=4))
                 return response_data
             else:
+                global PUSH_MSG
+                PUSH_MSG += f'IP频繁，请一段时间后再试!!!\n'
                 raise print('IP频繁,请更换IP或者稍后再试!!!\n', response_data['error_description'])
 
 
@@ -595,10 +632,9 @@ async def activation_code(access_token, captcha, xid, in_code):
             raise error
 
 
-async def main():
+async def main(incode):
+    global PUSH_MSG
     try:
-        check_env()
-        incode = INVITE_CODE
         start_time = time.time()
         xid = str(uuid.uuid4()).replace("-", "")
         mail = await get_mail()
@@ -628,19 +664,33 @@ async def main():
         if activation['add_days'] == 5:
             print(f'邀请码: {incode} ==> 邀请成功, 用时: {run_time} 秒')
             print(f'邮箱: {mail}')
-            print(f'密码: Qwer1234')
+            print(f'密码: linyuan666')
+            PUSH_MSG += f'邀请码: {incode} ==> 邀请成功\n邮箱: {mail}\n密码: linyuan666\n'
             return
         else:
             print(f'邀请码: {incode} ==> 邀请失败, 用时: {run_time} 秒')
+            PUSH_MSG += f'邀请码: {incode} ==> 邀请失败\n'
         # input('按回车键再次邀请!!!')
-        await main()
+        await main(incode)
     except Exception as e:
         if '环境变量' in str(e):
             return
         print(f'异常捕获:{e}')
-        print('请检查网络环境,(开启科学上网)重试!!!')
+        PUSH_MSG += f'邀请异常:{e}\n'
+        # print('请检查网络环境,(开启科学上网)重试!!!')
         # input('按回车键重试!!!')
         # await main()
 
 
-asyncio.run(main())
+async def run():
+    global PUSH_MSG
+    invite_code_list = check_env()
+    for i in range(len(invite_code_list)):
+        print(f'=========正在邀请第 {i + 1} 个邀请码=========')
+        PUSH_MSG += f'=========第 {i + 1} 个邀请码=========\n'
+        invite_code = invite_code_list[i]
+        await main(invite_code)
+    await push(PUSH_MSG)
+
+
+asyncio.run(run())

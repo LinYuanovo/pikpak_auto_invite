@@ -25,17 +25,25 @@
 ## 目录
 
 - [作者](#作者)
+- [说明](#说明)
 - [上手指南](#上手指南)
   - [本地运行](#本地运行)
   - [GitHub Actions运行（每日云端定时自动运行）](#GitHubActions运行)
 - [文件目录说明](#文件目录说明)
-- [说明](#说明)
 
 ### 作者
 
 临渊
 
 邮箱：<1577242215@qq.com>
+
+### 说明
+
+- 本项目仅仅只是在UP主[纸鸢花的花语](https://space.bilibili.com/67788420/)所公开的源码以及其群管理Atong的脚本基础上进行简单修改，加入了图像识别处理验证码，并未进行任何架构上的更改。上传本项目也仅为了用于学习研究以及备份，无任何不良引导，如有侵权请联系我进行删除。如果项目对你有帮助欢迎点点star。
+- 项目可以依赖于GitHub Actions自动运行，无需任何环境
+- 官方限制现在邀请的会员掉了人数也不会掉，所以邀请之前请查看自己人数是否超**50**人
+- **因为是刷取的会员，所以很大概率会掉，所以建议日常注册小号获取会员来保存资源，需要的时候再把资源分享给大号，让大号刷会员使用资源**
+- 如账号出现问题本人概不负责，建议小号使用
 
 ### 上手指南
 
@@ -82,8 +90,6 @@ python run.py
 
 如果多次出现IP问题可尝试将自己所用的魔法设置为代理，即主程序`run.py`的`PROXY`参数
 
-如果觉得模型不够满意也可以查看我的另一个项目[Ddddocr 自训练今日校园、PikPak验证码模型](https://github.com/LinYuanovo/ddddocr_models)里面包含了几个版本的模型以及数据集，可以自己进行训练
-
 #### GitHubActions运行
 
 [B站-视频教程](https://www.bilibili.com/video/BV1JZ3FeWEsF/)
@@ -92,27 +98,35 @@ python run.py
 
     ![对项目进行fork](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/f43174c1-1576-4ab0-b86f-31355b400887.png)
 
-2. 然后点击你fork的项目中的**Settings**，找到**Secrets and variables**，选中**Actions**里的**New repository secret**添加一个环境变量，名称必须为**INVITE_CODE**，内容就填你的邀请码
+2. 然后点击你fork的项目中的**Settings**，找到**Secrets and variables**，选中**Actions**里的**New repository secret**添加一个环境变量，名称必须为**INVITE_CODE**，内容就填你的邀请码，如果是多个邀请码，用换行或者@进行分割。
 
     ![添加变量](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/8ad57054-1c8b-4100-8e24-ab8d6ef51899.png)
 
     ![添加变量](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/1a702216-0a12-44c4-8067-54eb8e34e7c5.png)
 
-3. 点击你项目上方的**Actions**，第一次打开可能需要点击 `I understand...`，来启用actions
+3. （可选）如果需要推送结果到微信，建议使用pushplus推送服务，添加一个环境变量，名称必须为**PUSHPLUS_TOKEN**，内容就填你的pushplus的token（[token获取方法](https://pushplus.plus/push1.html)）。
 
-4. 提交修改来触发Actions，建议直接修改`run.py`，在空白的地方输入一次换行**commit**提交即可
+    ![填写pushplus变量](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/Snipaste_2024-06-27_14-50-57.png)
+
+4. 点击你项目上方的**Actions**，第一次打开可能需要点击 `I understand...`，来启用actions
+
+5. 提交修改来触发Actions，建议直接修改`run.py`，在空白的地方输入一次换行**commit**提交即可
 
     ![修改run.py](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/44e7cf20-658a-4400-99a3-35babc2d5834.png)
 
     ![提交修改](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/cca72584-36be-4b16-b0bb-141899eaa1b5.png)
 
-5. 点开**Actions**查看运行日志
+6. 点开**Actions**查看运行日志
 
     ![查看日志](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/3e58af4c-bf57-496c-9129-d237fd0aae7d.png)
 
     ![查看日志](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/2cbadd33-bb64-4619-bc38-f86b3bd59ed8.png)
 
-    至此操作完成，每天早十点、晚六点十分各定时执行一次（可以自己到`/.github/workflows/run.yml`中修改定时），可以以同样方式进入**Actions**查看日志
+    至此操作完成，每天晚六点十分定时执行一次（可以自己到`/.github/workflows/run.yml`中修改定时），可以以同样方式进入**Actions**查看日志
+    
+    如果你启用了PUSHPLUS_TOKEN环境变量，效果如下所示
+    
+    ![推送结果](https://raw.githubusercontent.com/LinYuanovo/pic_bed/main/pikpak_auto_invite/61874733-02e9-4118-816c-4e35791de986.png)
 
 ### 文件目录说明
 
@@ -132,11 +146,6 @@ pikpak_auto_invite
 └── recognize.py            图像识别
 ```
 
-### 说明
-
-- 本项目仅仅只是在UP主[纸鸢花的花语](https://space.bilibili.com/67788420/)所公开的源码以及其群管理Atong的脚本基础上进行简单修改，加入了图像识别处理验证码，并未进行任何架构上的更改。上传本项目也仅为了用于学习研究以及备份，无任何不良引导，如有侵权请联系我进行删除。如果项目对你有帮助欢迎点点star。
-- 项目依赖于GitHub Actions运行，不会泄露你的邀请码
-- 官方限制现在邀请的会员掉了人数也不会掉，所以邀请之前请查看自己人数是否超**50**人
 
 <!-- links -->
 
