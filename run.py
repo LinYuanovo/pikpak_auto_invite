@@ -12,7 +12,7 @@ from rich import print_json
 
 DEBUG_MODE = False  # Debug模式，是否打印请求返回信息
 # PROXY = input('请输入代理，如不需要直接回车:')  # 代理，如果多次出现IP问题可尝试将自己所用的魔法设置为代理。例如：使用clash则设置为 'http://127.0.0.1:7890'
-PROXY = 'vless://bm9uZTpmMTdmMzBjYy0xMGFlLTQ3YTAtOWRhMy0yM2IzOTVmMzJiNjhAMTg4LjExNC45Ny4xNzQ6ODA?remarks=m7kk.li773436573.workers.dev&obfsParam=m7kk.li773436573.workers.dev&path=/?ed=2048&obfs=websocket'
+PROXY = ''
 PUSHPLUS_TOKEN = os.getenv('PUSHPLUS_TOKEN') or ''
 INVITE_CODE = os.getenv('INVITE_CODE') or input('请输入邀请码: ')
 PUSH_MSG = ''
