@@ -262,10 +262,18 @@ async def get_image(xid):
                 # 识别图片
                 select_id = recognize.run()
                 # 删除缓存图片
-                image.delete_img()
+                # image.delete_img()
             json_data = img_jj(frames, int(select_id), pid)
             f = json_data['f']
             npac = json_data['ca']
+            d_request_data = {
+                "pid": pid,
+                "device_id": xid,
+                "f": f
+            }
+            async with session.post(f"https://paperkiteidleplus.top/document/pikpak/hash.php", json=d_request_data, ssl=False) as response1:
+                response_data = await response1.json()
+                d = response_data['d']
             params = {
                 'pid': pid,
                 'deviceid': xid,
@@ -274,11 +282,12 @@ async def get_image(xid):
                 'n': npac[0],
                 'p': npac[1],
                 'a': npac[2],
-                'c': npac[3]
+                'c': npac[3],
+                'd': d
             }
             async with session.get(f"https://user.mypikpak.com/pzzl/verify", params=params, ssl=False,
-                                   proxy=PROXY) as response1:
-                response_data = await response1.json()
+                                   proxy=PROXY) as response2:
+                response_data = await response2.json()
             result = {'pid': pid, 'traceid': traceid, 'response_data': response_data}
             return result
 
